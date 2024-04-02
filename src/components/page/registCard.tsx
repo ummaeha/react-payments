@@ -4,25 +4,30 @@ import question from '../../assets/question.svg'
 import Container from '../container'
 import Input from '../input/input'
 import BasicLayout from '../layout/basicLayout'
-import './registCard.css'
+import './RegistCard.css'
 import CardBox from '../CardBox'
 import useInput from '../../hooks/useInput'
+import Modal, { CardItemType, ThemeColorType } from '../modal/Modal'
 
-export type RegisterDataType = {
+export type RegisteredDataType = {
 	cardNumber: string
 	expirationDate: string
 	ownerName: string
 	securityCode?: string
 	secretCode?: string
+	theme?: ThemeColorType
+	cardSelectionTypeName: string
+	cardNickName?: string
 }
 
 type RegistCardProps = {
-	setRegisterData: (value: RegisterDataType) => void
+	setRegisterData: (value: RegisteredDataType) => void
 	onPrev?: () => void
 	onNext?: () => void
 }
 
 const CARD_NUMBER_LENGTH = 4
+const CARD_HOLDER_NAME_LENGTH = 30
 
 /**
  * [리팩토링 요소]
@@ -30,6 +35,12 @@ const CARD_NUMBER_LENGTH = 4
  */
 const RegistCard = (props: RegistCardProps) => {
 	const { setRegisterData, onPrev, onNext } = props
+
+	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const [cardSelectionInfo, setCardSelectionInfo] = useState<CardItemType<ThemeColorType>>({
+		name: '',
+		theme: '',
+	})
 
 	// 카드번호 - 1번째
 	const { value: firstCardNumber, handleChange: handleChangeCardNumberFirstFunc } = useInput('')
@@ -85,12 +96,22 @@ const RegistCard = (props: RegistCardProps) => {
 			ownerName: ownerNameValue,
 			securityCode: securityCode,
 			secretCode: `${firstSecretCode}${secondSecretCode}`,
+			theme: cardSelectionInfo.theme,
+			cardSelectionTypeName: cardSelectionInfo.name,
 		})
 	}
 
 	return (
 		<>
 			<BasicLayout>
+				{isOpen && (
+					<Modal
+						onNext={() => {
+							setIsOpen(false)
+						}}
+						setModalInfo={setCardSelectionInfo}
+					></Modal>
+				)}
 				<BasicLayout.Header>
 					<button onClick={onPrev} style={{ display: 'flex' }}>
 						<img src={arrow} />
@@ -100,12 +121,15 @@ const RegistCard = (props: RegistCardProps) => {
 					</button>
 				</BasicLayout.Header>
 				<BasicLayout.Main>
-					<CardBox
+					<CardBox<ThemeColorType>
+						onClick={() => setIsOpen(true)}
 						cardNumber={`${firstCardNumber}${secondCardNumber}${thirdCardMaskedNumber}${fourthCardMaskedNumber}`}
 						expirationDate={expirationDate}
 						ownerName={ownerNameValue}
+						theme={cardSelectionInfo.theme}
+						cardSelectionTypeName={cardSelectionInfo.name}
 					/>
-					<Container title="카드 번호">
+					<Container title="카드 번호" childClassName="input-background-default">
 						<div className="container-flex">
 							<Input
 								type="text"
@@ -118,7 +142,9 @@ const RegistCard = (props: RegistCardProps) => {
 									handleChangeCardNumberFirstFunc(event)
 								}}
 							/>
-							{firstCardNumber.length === CARD_NUMBER_LENGTH && <div>-</div>}
+							{firstCardNumber.length === CARD_NUMBER_LENGTH && (
+								<div className="divider">-</div>
+							)}
 							<Input
 								type="text"
 								value={secondCardNumber}
@@ -130,7 +156,9 @@ const RegistCard = (props: RegistCardProps) => {
 									handleChangeCardNumberSecondFunc(event)
 								}}
 							/>
-							{secondCardNumber.length === CARD_NUMBER_LENGTH && <div>-</div>}
+							{secondCardNumber.length === CARD_NUMBER_LENGTH && (
+								<div className="divider">-</div>
+							)}
 							{/* 카드번호 3번째 자리 */}
 							<Input
 								type="text"
@@ -152,7 +180,9 @@ const RegistCard = (props: RegistCardProps) => {
 									)
 								}}
 							/>
-							{thirdCardMaskedNumber.length === CARD_NUMBER_LENGTH && <div>-</div>}
+							{thirdCardMaskedNumber.length === CARD_NUMBER_LENGTH && (
+								<div className="divider">-</div>
+							)}
 
 							<Input
 								type="text"
@@ -220,7 +250,9 @@ const RegistCard = (props: RegistCardProps) => {
 					</Container>
 					<Container
 						title="카드 소유자 이름(선택)"
-						titleRight={<span>{ownerNameValue.length}</span>}
+						titleRight={
+							<span>{`${ownerNameValue.length}/${CARD_HOLDER_NAME_LENGTH}`}</span>
+						}
 					>
 						<Input
 							placeholder="카드에 표시된 이름과 동일하게 입력하세요."
