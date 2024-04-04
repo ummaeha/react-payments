@@ -3,7 +3,7 @@ import useStepper from './hooks/useStepper'
 import RegistCard, { RegisteredDataType } from './components/page/RegistCard'
 import Navigation from './components/navigation/navigation'
 import RegistEnd from './components/page/RegistEnd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CardBox from './components/CardBox'
 
 /**
