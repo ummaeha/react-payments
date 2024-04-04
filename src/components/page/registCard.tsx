@@ -3,11 +3,19 @@ import arrow from '../../assets/arrow.svg'
 import question from '../../assets/question.svg'
 import Container from '../container'
 import Input from '../input/input'
-import BasicLayout from '../layout/basicLayout'
+import BasicLayout from '../layout/BasicLayout'
 import './RegistCard.css'
 import CardBox from '../CardBox'
 import useInput from '../../hooks/useInput'
 import Modal, { CardItemType, ThemeColorType } from '../modal/Modal'
+import {
+	CARD_NUMBER_LENGTH,
+	CARD_HOLDER_NAME_LENGTH,
+	EXPIRE_DATE_MAX_LENGTH,
+	EXPIRE_DATE_MAX_LENGTH_WITH_DEVIDER,
+	EXPIRE_DATE_DIVIDER_INDEX,
+	SECRET_CODE_MAX_LENTGH,
+} from '../../constants'
 
 export type RegisteredDataType = {
 	cardNumber: string
@@ -25,9 +33,6 @@ type RegistCardProps = {
 	onPrev?: () => void
 	onNext?: () => void
 }
-
-const CARD_NUMBER_LENGTH = 4
-const CARD_HOLDER_NAME_LENGTH = 30
 
 /**
  * [리팩토링 요소]
@@ -74,9 +79,8 @@ const RegistCard = (props: RegistCardProps) => {
 	const [secondSecretMaskedCode, setSecondSecretMaskedCode] = useState<string>()
 
 	// 조건에 부합하면 - true리턴 / 조건에 부합하지 않으면 false 리턴
-	const validateNumberWithMaxLength = (value: string, maxLength?: number): boolean => {
-		const MAX_LENGTH = maxLength || 4
-		const isValidLength = value.length <= MAX_LENGTH
+	const validateNumberWithMaxLength = (value: string, maxLength: number): boolean => {
+		const isValidLength = value.length <= maxLength
 		const isNumber = !Number.isNaN(Number(value))
 
 		const isValid = [isValidLength, isNumber].every(Boolean)
@@ -135,7 +139,12 @@ const RegistCard = (props: RegistCardProps) => {
 								type="text"
 								value={firstCardNumber}
 								onChange={(event) => {
-									if (!validateNumberWithMaxLength(event.target.value, 4)) {
+									if (
+										!validateNumberWithMaxLength(
+											event.target.value,
+											CARD_NUMBER_LENGTH,
+										)
+									) {
 										return
 									}
 
@@ -149,7 +158,12 @@ const RegistCard = (props: RegistCardProps) => {
 								type="text"
 								value={secondCardNumber}
 								onChange={(event) => {
-									if (!validateNumberWithMaxLength(event.target.value, 4)) {
+									if (
+										!validateNumberWithMaxLength(
+											event.target.value,
+											CARD_NUMBER_LENGTH,
+										)
+									) {
 										return
 									}
 
@@ -167,7 +181,12 @@ const RegistCard = (props: RegistCardProps) => {
 									const newThirdCardNumber =
 										thirdCardNumber + event.target.value.replace(/\*/g, '')
 
-									if (!validateNumberWithMaxLength(newThirdCardNumber, 4)) {
+									if (
+										!validateNumberWithMaxLength(
+											newThirdCardNumber,
+											CARD_NUMBER_LENGTH,
+										)
+									) {
 										return
 									}
 
@@ -191,7 +210,12 @@ const RegistCard = (props: RegistCardProps) => {
 									const newFourthCardNumber =
 										fourthCardNumber + event.target.value.replace(/\*/g, '')
 
-									if (!validateNumberWithMaxLength(newFourthCardNumber, 4)) {
+									if (
+										!validateNumberWithMaxLength(
+											newFourthCardNumber,
+											CARD_NUMBER_LENGTH,
+										)
+									) {
 										return
 									}
 
@@ -216,7 +240,7 @@ const RegistCard = (props: RegistCardProps) => {
 									if (
 										event.key === 'Backspace' &&
 										expirationDate.includes('/') &&
-										expirationDate.length === 3
+										expirationDate.length === EXPIRE_DATE_MAX_LENGTH
 									) {
 										event.preventDefault()
 										setExpirationDate(
@@ -227,11 +251,11 @@ const RegistCard = (props: RegistCardProps) => {
 								onChange={(event) => {
 									const { value } = event.target
 
-									if (value.length > 5) {
+									if (value.length > EXPIRE_DATE_MAX_LENGTH_WITH_DEVIDER) {
 										return
 									}
 									// 3번째 자리에 /를 삽입
-									if (value.length === 2) {
+									if (value.length === EXPIRE_DATE_DIVIDER_INDEX) {
 										if (!isMonth(value)) {
 											alert(
 												'월은 1이상 12이하 숫자여야 합니다. ex) 3월이라면 03으로 기입해주세요',
@@ -298,7 +322,12 @@ const RegistCard = (props: RegistCardProps) => {
 										const newFirstSecretCode =
 											firstSecretCode + event.target.value.replace(/\*/g, '')
 
-										if (!validateNumberWithMaxLength(event.target.value, 1)) {
+										if (
+											!validateNumberWithMaxLength(
+												event.target.value,
+												SECRET_CODE_MAX_LENTGH,
+											)
+										) {
 											return
 										}
 										setFirstSecretCode(newFirstSecretCode)

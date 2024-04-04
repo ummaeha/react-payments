@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import '../../../styles/modal.css'
 import CardSelectionItem from '../CardSelectionItem'
 
 type ModelProps = {
-	onNext: () => {} | void
-	setModalInfo: (itemInfo: CardItemType<ThemeColorType>) => void
+	onNext: () => void
+	setModalInfo?: (itemInfo: CardItemType<ThemeColorType>) => void
 }
 
 export type ThemeColorType = 'red' | 'pink' | 'orange' | 'green' | 'blue' | 'yellow' | ''
@@ -35,7 +34,7 @@ const CARD_LIST: Array<CardItemType<ThemeColorType>> = [
 
 function Modal(props: ModelProps) {
 	const nextHandler = (itemInfo: CardItemType<ThemeColorType>) => {
-		props.setModalInfo(itemInfo)
+		props.setModalInfo && props.setModalInfo(itemInfo)
 		props.onNext()
 	}
 	return (

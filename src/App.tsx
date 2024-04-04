@@ -32,44 +32,23 @@ function App() {
 	const [registeredData, setRegisteredData] = useState<RegisteredDataType>(INITIAL_CARD_STATE)
 	const [cardName, setCardName] = useState<string>(registeredData.cardSelectionTypeName)
 	const [cardList, setCardList] = useState<Map<string, RegisteredDataType>>(new Map())
-	// const [cardList, setCardList] = useState<Array<RegisteredDataType>>([])
-
-	// <Array<RegisteredDataType>>
 
 	const addMapElement = () => {
-		// 현재 맵 상태를 복사하여 새로운 맵 객체를 생성합니다.
 		const newMap = new Map(cardList)
-		// 새로운 요소를 추가합니다.
+
 		newMap.set(cardName, registeredData)
-		// 변경된 맵 상태를 설정합니다.'
 		setCardList(newMap)
 	}
 
-	// const setCardName = (input: string) => {
-	// 	setRegisteredData({ ...registeredData, cardNickName: input })
-	// }
-
 	return (
 		<div className="app" id="app">
-			<Navigation currentStageName={step!}></Navigation>
+			<Navigation currentStageName={step}></Navigation>
 
 			<Stepper>
 				<Step name="카드목록">
 					<button className="card-add-button" onClick={() => setStep('카드추가')}>
 						+
 					</button>
-					{/* {cardList.map((item) => (
-						<>
-							<CardBox
-								ownerName={item.ownerName}
-								expirationDate={item.expirationDate}
-								cardNumber={item.cardNumber}
-								theme={item.theme}
-								cardSelectionTypeName={item.cardSelectionTypeName}
-							/>
-							<div>{item.cardNickName}</div>
-						</>
-					))} */}
 					{[...cardList].map(([key, value]) => (
 						<>
 							<CardBox
