@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { RegisteredDataType } from './RegistCard'
 import CardBox from '../CardBox'
 

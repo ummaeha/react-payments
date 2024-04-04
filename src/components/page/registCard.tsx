@@ -269,7 +269,6 @@ const RegistCard = (props: RegistCardProps) => {
 										securityCode + event.target.value.replace(/\*/g, '')
 
 									const isValidNumber = (input: string) => {
-										console.log('input', input, !Number.isNaN(Number(input)))
 										return !Number.isNaN(Number(input))
 									}
 									if (!isValidNumber(newSecurityCode)) {

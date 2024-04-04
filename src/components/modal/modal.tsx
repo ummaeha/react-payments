@@ -34,20 +34,10 @@ const CARD_LIST: Array<CardItemType<ThemeColorType>> = [
 ]
 
 function Modal(props: ModelProps) {
-	// const [selection, setSelection] = useState<CardItemType<ThemeColorType>>({
-	// 	companyName: '',
-	// 	theme: '',
-	// })
-
 	const nextHandler = (itemInfo: CardItemType<ThemeColorType>) => {
 		props.setModalInfo(itemInfo)
 		props.onNext()
 	}
-	// const nextHandler = () => {
-	// 	console.log()
-	// }
-
-	// card_list 를 4 * 2 matrix로 자르기
 	return (
 		<div className="modal-dimmed">
 			<div className="modal">

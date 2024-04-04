@@ -42,7 +42,6 @@ function App() {
 		// 새로운 요소를 추가합니다.
 		newMap.set(cardName, registeredData)
 		// 변경된 맵 상태를 설정합니다.'
-		console.log('지금 카드', [...cardList])
 		setCardList(newMap)
 	}
 
